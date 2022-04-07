@@ -3,8 +3,8 @@ import java.awt.Graphics;
 import java.util.TimerTask;
 
 public class Game extends TimerTask {
-    private final Cell[][] cells;
-    private final int cellSize;
+    public final Cell[][] cells;
+    public final int cellSize;
     private final Snake snake;
 
     Game() {
@@ -42,32 +42,6 @@ public class Game extends TimerTask {
                     } else {
                         cell.setSnake(false);
                     }
-                }
-            }
-        }
-    }
-
-    public void drawGrid(Graphics g) {
-        // Draw horizontal lines
-        for (int i = this.cellSize; i <= Constants.SCREEN_WIDTH; i += this.cellSize) {
-            g.drawLine(i, 0, i, Constants.SCREEN_HEIGHT);
-            g.drawLine(0, i, Constants.SCREEN_WIDTH, i);
-        }
-
-        this.colorGrid(g);
-    }
-
-    private void colorGrid(Graphics g) {
-        for (Cell[] cellRow : this.cells) {
-            for (Cell cell : cellRow) {
-                Position cellPos = cell.getPosition();
-
-                if (cell.isApple()) {
-                    g.setColor(Color.RED);
-                    g.fillOval(cellPos.getX(), cellPos.getY(), this.cellSize, this.cellSize);
-                } else if (cell.isSnake()) {
-                    g.setColor(Color.GREEN);
-                    g.fillRect(cellPos.getX(), cellPos.getY(), this.cellSize, this.cellSize);
                 }
             }
         }

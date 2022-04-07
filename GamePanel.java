@@ -27,6 +27,33 @@ public class GamePanel extends JPanel implements ActionListener {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        this.game.drawGrid(g);
+        this.drawGrid(g);
+    }
+
+    public void drawGrid(Graphics g) {
+        // Draw horizontal lines
+        for (int i = this.game.cellSize; i <= Constants.SCREEN_WIDTH; i += this.game.cellSize) {
+            g.drawLine(i, 0, i, Constants.SCREEN_HEIGHT);
+            g.drawLine(0, i, Constants.SCREEN_WIDTH, i);
+        }
+
+        this.colorGrid(g);
+    }
+
+    private void colorGrid(Graphics g) {
+        for (Cell[] cellRow : this.game.cells) {
+            for (Cell cell : cellRow) {
+                Position cellPos = cell.getPosition();
+                int cellSize = this.game.cellSize;
+
+                if (cell.isApple()) {
+                    g.setColor(Color.RED);
+                    g.fillOval(cellPos.getX(), cellPos.getY(), cellSize, cellSize);
+                } else if (cell.isSnake()) {
+                    g.setColor(Color.GREEN);
+                    g.fillRect(cellPos.getX(), cellPos.getY(), cellSize, cellSize);
+                }
+            }
+        }
     }
 }
