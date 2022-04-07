@@ -1,11 +1,17 @@
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Screen {
+public class Screen implements KeyListener {
     private final JFrame mainScreen;
+    private final GamePanel panel;
 
-    public Screen (int numCells) {
+    public Screen () {
         mainScreen = new JFrame("Snake");
-        mainScreen.add(new GamePanel(numCells));
+        this.panel = new GamePanel();
+        mainScreen.add(this.panel);
+        mainScreen.addKeyListener(this);
 
         mainScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainScreen.pack();
@@ -13,4 +19,12 @@ public class Screen {
         mainScreen.setLocationRelativeTo(null);
         mainScreen.setVisible(true);
     }
+
+    public void keyPressed(KeyEvent e) {
+        this.panel.game.processKeyPress(e.getKeyCode());
+    }
+
+    // These functions are here to satisfy the KeyListener interface
+    public void keyTyped(KeyEvent keyEvent) {}
+    public void keyReleased(KeyEvent keyEvent) {}
 }

@@ -1,5 +1,5 @@
 public class Cell {
-    private final Position position;
+    private Position position;
     private boolean isApple = false;
     private boolean isSnake = false;
 
