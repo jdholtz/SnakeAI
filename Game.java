@@ -1,11 +1,12 @@
-import java.awt.Color;
-import java.awt.Graphics;
+import java.util.Random;
 import java.util.TimerTask;
 
 public class Game extends TimerTask {
     public final Cell[][] cells;
     public final int cellSize;
     private final Snake snake;
+    private Position applePos;
+    private boolean isRunning;
 
     Game() {
         // Number of cells should be a perfect square so a square grid can be made
@@ -21,23 +22,78 @@ public class Game extends TimerTask {
         }
 
         this.snake = new Snake();
+        this.generateApple();
+        this.isRunning = true;
+    }
+
+    private void generateApple() {
+        int rand1, rand2;
+        Cell randCell;
+
+        do {
+            rand1 = new Random().nextInt(this.cells.length);
+            rand2 = new Random().nextInt(this.cells[0].length);
+            randCell = this.cells[rand1][rand2];
+        } while(randCell.isSnake());
+
+        this.applePos = new Position(rand1, rand2);
     }
 
     public void run() {
-        this.snake.move();
-        this.updateCells();
+        if (this.isRunning) {
+            this.snake.move();
+            this.checkCollisions();
+            this.updateCells();
+        }
+    }
+
+    private void checkCollisions() {
+        Position snakeHeadPos = this.snake.body[this.snake.body.length - 1];
+
+        if (this.snakeCollidesWithApple(snakeHeadPos)) {
+            this.generateApple();
+            System.out.println("Ate apple");
+        }
+
+        if (this.snakeCollidesWithBorder(snakeHeadPos)) {
+            this.isRunning = false;
+            System.out.println("Game over");
+        }
+    }
+
+    private boolean snakeCollidesWithApple(Position snakeHeadPos) {
+        return snakeHeadPos.getX() == this.applePos.getX() &&
+               snakeHeadPos.getY() == this.applePos.getY();
+    }
+
+    private boolean snakeCollidesWithBorder(Position snakeHeadPos) {
+        int headPosX = snakeHeadPos.getX();
+        int headPosY = snakeHeadPos.getY();
+
+        return headPosX < 0 || headPosX > this.cells.length - 1 ||
+               headPosY < 0 || headPosY > this.cells.length - 1;
     }
 
     public void updateCells() {
         for (Cell[] cellRow : this.cells) {
             for (Cell cell : cellRow) {
-                Position cellPos = cell.getPosition();
+                int cellX = cell.getPosition().getX();
+                int cellY = cell.getPosition().getY();
+                int appleX = this.applePos.getX() * this.cellSize;
+                int appleY = this.applePos.getY() * this.cellSize;
+
+                // TODO: Refactor to set cells to true in generation
+                if (cellX == appleX && cellY == appleY) {
+                    cell.setApple(true);
+                } else {
+                    cell.setApple(false);
+                }
 
                 for (Position snakePos : this.snake.body) {
                     int snakeX = snakePos.getX() * this.cellSize;
                     int snakeY = snakePos.getY() * this.cellSize;
 
-                    if (cellPos.getX() == snakeX && cellPos.getY() == snakeY) {
+                    if (cellX == snakeX && cellY == snakeY) {
                         cell.setSnake(true);
                     } else {
                         cell.setSnake(false);
@@ -73,8 +129,6 @@ public class Game extends TimerTask {
                     this.snake.direction = Constants.DIRECTION_LEFT;
                 }
                 break;
-            default: break;
         }
-        System.out.println(this.snake.direction);
     }
 }
