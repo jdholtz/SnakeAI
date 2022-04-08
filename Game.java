@@ -48,9 +48,10 @@ public class Game extends TimerTask {
     }
 
     private void checkCollisions() {
-        Position snakeHeadPos = this.snake.body[this.snake.body.length - 1];
+        Position snakeHeadPos = this.snake.body[0];
 
         if (this.snakeCollidesWithApple(snakeHeadPos)) {
+            this.snake.grow();
             this.generateApple();
             System.out.println("Ate apple");
         }
@@ -77,6 +78,7 @@ public class Game extends TimerTask {
     public void updateCells() {
         for (Cell[] cellRow : this.cells) {
             for (Cell cell : cellRow) {
+                cell.setSnake(false);
                 int cellX = cell.getPosition().getX();
                 int cellY = cell.getPosition().getY();
                 int appleX = this.applePos.getX() * this.cellSize;
@@ -95,8 +97,6 @@ public class Game extends TimerTask {
 
                     if (cellX == snakeX && cellY == snakeY) {
                         cell.setSnake(true);
-                    } else {
-                        cell.setSnake(false);
                     }
                 }
             }

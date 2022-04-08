@@ -20,16 +20,20 @@ public class GamePanel extends JPanel implements ActionListener {
         timer.start();
     }
 
+    @Override
     public void actionPerformed(ActionEvent actionEvent) {
         this.game.run();
         this.repaint();
+        this.revalidate();
     }
 
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.drawGrid(g);
     }
 
+    // TODO: Draw grid only the first time drawing the screen
     public void drawGrid(Graphics g) {
         // Draw horizontal lines
         for (int i = this.game.cellSize; i <= Constants.SCREEN_WIDTH; i += this.game.cellSize) {
@@ -49,7 +53,8 @@ public class GamePanel extends JPanel implements ActionListener {
                 if (cell.isApple()) {
                     g.setColor(Color.RED);
                     g.fillOval(cellPos.getX(), cellPos.getY(), cellSize, cellSize);
-                } else if (cell.isSnake()) {
+                }
+                if (cell.isSnake()) {
                     g.setColor(Color.GREEN);
                     g.fillRect(cellPos.getX(), cellPos.getY(), cellSize, cellSize);
                 }

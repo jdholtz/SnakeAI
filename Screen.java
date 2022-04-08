@@ -1,5 +1,4 @@
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -20,11 +19,15 @@ public class Screen implements KeyListener {
         mainScreen.setVisible(true);
     }
 
+    @Override
     public void keyPressed(KeyEvent e) {
         this.panel.game.processKeyPress(e.getKeyCode());
     }
 
     // These functions are here to satisfy the KeyListener interface
+    @Override
     public void keyTyped(KeyEvent keyEvent) {}
+
+    @Override
     public void keyReleased(KeyEvent keyEvent) {}
 }
