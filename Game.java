@@ -56,7 +56,7 @@ public class Game extends TimerTask {
             System.out.println("Ate apple");
         }
 
-        if (this.snakeCollidesWithBorder(snakeHeadPos)) {
+        if (this.snakeCollidesWithBorder(snakeHeadPos) || this.snakeCollidesWithItself(snakeHeadPos)) {
             this.isRunning = false;
             System.out.println("Game over");
         }
@@ -73,6 +73,20 @@ public class Game extends TimerTask {
 
         return headPosX < 0 || headPosX > this.cells.length - 1 ||
                headPosY < 0 || headPosY > this.cells.length - 1;
+    }
+
+    private boolean snakeCollidesWithItself(Position snakeHeadPos) {
+        int headPosX = snakeHeadPos.getX();
+        int headPosY = snakeHeadPos.getY();
+
+        // Starts at 4 because it cannot run into the 3 body parts right behind the head
+        for (int i = 4; i < this.snake.body.length; i++) {
+            if (headPosX == this.snake.body[i].getX() && headPosY == this.snake.body[i].getY()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void updateCells() {
