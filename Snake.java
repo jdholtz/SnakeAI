@@ -1,10 +1,14 @@
 public class Snake {
     public Position[] body;
-    public int direction = Constants.DIRECTION_RIGHT;
+    public int direction = Constants.DIRECTION_UP;
 
-    Snake() {
-        this.body = new Position[1];
-        this.body[0] = new Position(0, 0);
+    Snake(int numCellsOnSide) {
+        int middleCell = numCellsOnSide / 2;
+        
+        this.body = new Position[3];
+        this.body[0] = new Position(middleCell, middleCell);
+        this.body[1] = new Position(middleCell, middleCell + 1);
+        this.body[2] = new Position(middleCell, middleCell + 2);
     }
 
     public void move() {
