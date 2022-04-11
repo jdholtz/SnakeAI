@@ -2,6 +2,8 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,17 +24,18 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (this.game.isRunning) {
-            this.game.run();
-            this.repaint();
-            this.revalidate(); // Needed to redraw every frame
-        }
+        if (this.game.isRunning) this.game.run();
+
+        this.repaint();
+        this.revalidate(); // Needed to redraw every frame
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.drawGrid(g);
+
+        if (!this.game.isRunning) this.drawGameOverScreen(g);
     }
 
     public void drawGrid(Graphics g) {
@@ -59,5 +62,25 @@ public class GamePanel extends JPanel implements ActionListener {
             g.setColor(Color.GREEN);
             g.fillRect(snakePos.getX() * cellSize, snakePos.getY() * cellSize, cellSize, cellSize);
         }
+    }
+
+    private void drawGameOverScreen(Graphics g) {
+        this.repaint();
+        this.revalidate();
+        int score = this.game.snake.getLength() - 3; // 3 is the starting length, so subtract that
+        String gameOverMessage = "Game Over";
+        String scoreMessage = "Score: " + score;
+
+        g.setColor(Color.BLUE);
+        g.setFont(new Font("TimesRoman", Font.BOLD, 64));
+
+        // Get x value to center text
+        FontMetrics fm = g.getFontMetrics();
+        int gameOverX = ((Constants.SCREEN_WIDTH - fm.stringWidth(gameOverMessage)) / 2);
+        int scoreMessageX = ((Constants.SCREEN_WIDTH - fm.stringWidth(scoreMessage)) / 2);
+
+        g.drawString(gameOverMessage, gameOverX, Constants.SCREEN_HEIGHT / 2);
+        g.drawString(scoreMessage, scoreMessageX, Constants.SCREEN_HEIGHT / 2 + 100);
+
     }
 }

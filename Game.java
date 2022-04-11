@@ -115,7 +115,7 @@ public class Game extends TimerTask {
         return this.cells[posX][posY];
     }
 
-    public void processKeyPress(int keyCode) { // TODO: Change name?
+    public void processKeyPress(int keyCode) {
         // Prevents being able to change directions twice in the same frame
         if (this.keyPressedInFrame) return;
         this.keyPressedInFrame = true;
