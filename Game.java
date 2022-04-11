@@ -7,6 +7,7 @@ public class Game extends TimerTask {
     public final Snake snake;
     public Position applePos;
     public boolean isRunning;
+    private boolean keyPressedInFrame = false;
 
     Game() {
         // Number of cells should be a perfect square so a square grid can be made
@@ -41,6 +42,8 @@ public class Game extends TimerTask {
     }
 
     public void run() {
+        this.keyPressedInFrame = false;
+
         this.snake.move();
         this.checkCollisions();
         this.updateCells();
@@ -113,6 +116,10 @@ public class Game extends TimerTask {
     }
 
     public void processKeyPress(int keyCode) { // TODO: Change name?
+        // Prevents being able to change directions twice in the same frame
+        if (this.keyPressedInFrame) return;
+        this.keyPressedInFrame = true;
+
         switch (keyCode) {
             case 87: // w
             case 38: // Up arrow
