@@ -22,9 +22,11 @@ public class GamePanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        this.game.run();
-        this.repaint();
-        this.revalidate();
+        if (this.game.isRunning) {
+            this.game.run();
+            this.repaint();
+            this.revalidate(); // Needed to redraw every frame
+        }
     }
 
     @Override
@@ -33,11 +35,11 @@ public class GamePanel extends JPanel implements ActionListener {
         this.drawGrid(g);
     }
 
-    // TODO: Draw grid only the first time drawing the screen
     public void drawGrid(Graphics g) {
-        // Draw horizontal lines
         for (int i = this.game.cellSize; i <= Constants.SCREEN_WIDTH; i += this.game.cellSize) {
+            // Draw vertical lines
             g.drawLine(i, 0, i, Constants.SCREEN_HEIGHT);
+            // Draw horizontal lines
             g.drawLine(0, i, Constants.SCREEN_WIDTH, i);
         }
 
@@ -45,20 +47,17 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     private void colorGrid(Graphics g) {
-        for (Cell[] cellRow : this.game.cells) {
-            for (Cell cell : cellRow) {
-                Position cellPos = cell.getPosition();
-                int cellSize = this.game.cellSize;
+        int cellSize = this.game.cellSize;
 
-                if (cell.isApple()) {
-                    g.setColor(Color.RED);
-                    g.fillOval(cellPos.getX(), cellPos.getY(), cellSize, cellSize);
-                }
-                if (cell.isSnake()) {
-                    g.setColor(Color.GREEN);
-                    g.fillRect(cellPos.getX(), cellPos.getY(), cellSize, cellSize);
-                }
-            }
+        // Color cell that has the apple
+        Position applePos = this.game.applePos;
+        g.setColor(Color.RED);
+        g.fillOval(applePos.getX() * cellSize, applePos.getY() * cellSize, cellSize, cellSize);
+
+        // Color every cell that has the snake
+        for (Position snakePos : this.game.snake.body) {
+            g.setColor(Color.GREEN);
+            g.fillRect(snakePos.getX() * cellSize, snakePos.getY() * cellSize, cellSize, cellSize);
         }
     }
 }

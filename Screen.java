@@ -3,11 +3,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class Screen implements KeyListener {
-    private final JFrame mainScreen;
     private final GamePanel panel;
 
     public Screen () {
-        mainScreen = new JFrame("Snake");
+        JFrame mainScreen = new JFrame("Snake");
         this.panel = new GamePanel();
         mainScreen.add(this.panel);
         mainScreen.addKeyListener(this);

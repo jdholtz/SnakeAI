@@ -4,9 +4,9 @@ import java.util.TimerTask;
 public class Game extends TimerTask {
     public final Cell[][] cells;
     public final int cellSize;
-    private final Snake snake;
-    private Position applePos;
-    private boolean isRunning;
+    public final Snake snake;
+    public Position applePos;
+    public boolean isRunning;
 
     Game() {
         // Number of cells should be a perfect square so a square grid can be made
@@ -30,6 +30,7 @@ public class Game extends TimerTask {
         int rand1, rand2;
         Cell randCell;
 
+        // Keep trying to generate an apple until it's in a position where the snake isn't
         do {
             rand1 = new Random().nextInt(this.cells.length);
             rand2 = new Random().nextInt(this.cells[0].length);
@@ -40,11 +41,9 @@ public class Game extends TimerTask {
     }
 
     public void run() {
-        if (this.isRunning) {
-            this.snake.move();
-            this.checkCollisions();
-            this.updateCells();
-        }
+        this.snake.move();
+        this.checkCollisions();
+        this.updateCells();
     }
 
     private void checkCollisions() {
@@ -53,7 +52,6 @@ public class Game extends TimerTask {
         if (this.snakeCollidesWithApple(snakeHeadPos)) {
             this.snake.grow();
             this.generateApple();
-            System.out.println("Ate apple");
         }
 
         if (this.snakeCollidesWithBorder(snakeHeadPos) || this.snakeCollidesWithItself(snakeHeadPos)) {
@@ -72,16 +70,17 @@ public class Game extends TimerTask {
         int headPosY = snakeHeadPos.getY();
 
         return headPosX < 0 || headPosX > this.cells.length - 1 ||
-               headPosY < 0 || headPosY > this.cells.length - 1;
+               headPosY < 0 || headPosY > this.cells[0].length - 1;
     }
 
     private boolean snakeCollidesWithItself(Position snakeHeadPos) {
         int headPosX = snakeHeadPos.getX();
         int headPosY = snakeHeadPos.getY();
+        Position[] snakeBody = this.snake.body;
 
-        // Starts at 4 because it cannot run into the 3 body parts right behind the head
-        for (int i = 4; i < this.snake.body.length; i++) {
-            if (headPosX == this.snake.body[i].getX() && headPosY == this.snake.body[i].getY()) {
+        // Starts at 4 because it cannot run into the 3 body parts right behind the head (and the head itself)
+        for (int i = 4; i < snakeBody.length; i++) {
+            if (headPosX == snakeBody[i].getX() && headPosY == snakeBody[i].getY()) {
                 return true;
             }
         }
@@ -90,31 +89,27 @@ public class Game extends TimerTask {
     }
 
     public void updateCells() {
+        // First, reset all cells. Then, set all cells that are part of the snake to true.
+        // Separating these functions into two loops increases efficiency because less iterating is done.
         for (Cell[] cellRow : this.cells) {
             for (Cell cell : cellRow) {
                 cell.setSnake(false);
-                int cellX = cell.getPosition().getX();
-                int cellY = cell.getPosition().getY();
-                int appleX = this.applePos.getX() * this.cellSize;
-                int appleY = this.applePos.getY() * this.cellSize;
-
-                // TODO: Refactor to set cells to true in generation
-                if (cellX == appleX && cellY == appleY) {
-                    cell.setApple(true);
-                } else {
-                    cell.setApple(false);
-                }
-
-                for (Position snakePos : this.snake.body) {
-                    int snakeX = snakePos.getX() * this.cellSize;
-                    int snakeY = snakePos.getY() * this.cellSize;
-
-                    if (cellX == snakeX && cellY == snakeY) {
-                        cell.setSnake(true);
-                    }
-                }
             }
         }
+
+        for (Position snakePos : this.snake.body) {
+            Cell snakeCell = this.getCellFromPosition(snakePos);
+            if (snakeCell != null) snakeCell.setSnake(true);
+        }
+    }
+
+    public Cell getCellFromPosition(Position pos) {
+        if (this.snakeCollidesWithBorder(pos)) return null; // Off the screen
+
+        int posX = pos.getX();
+        int posY = pos.getY();
+
+        return this.cells[posX][posY];
     }
 
     public void processKeyPress(int keyCode) { // TODO: Change name?

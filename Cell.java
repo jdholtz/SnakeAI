@@ -1,6 +1,5 @@
 public class Cell {
     private final Position position;
-    private boolean isApple = false;
     private boolean isSnake = false;
 
     Cell(int x, int y) {
@@ -9,14 +8,6 @@ public class Cell {
 
     public Position getPosition() {
         return this.position;
-    }
-
-    public boolean isApple() {
-        return this.isApple;
-    }
-
-    public void setApple(boolean isApple) {
-        this.isApple = isApple;
     }
 
     public boolean isSnake() {
