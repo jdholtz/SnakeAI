@@ -45,8 +45,8 @@ public class Game extends TimerTask {
         this.keyPressedInFrame = false;
 
         this.snake.move();
-        this.checkCollisions();
         this.updateCells();
+        this.checkCollisions();
     }
 
     private void checkCollisions() {
@@ -100,15 +100,17 @@ public class Game extends TimerTask {
             }
         }
 
-        for (Position snakePos : this.snake.body) {
+        Position[] snakeBody = this.snake.body;
+        for (Position snakePos : snakeBody) {
+            // Head position is off the screen, so we don't need to set it to true
+            if (snakePos == snakeBody[0] && this.snakeCollidesWithBorder(snakePos)) continue;
+
             Cell snakeCell = this.getCellFromPosition(snakePos);
-            if (snakeCell != null) snakeCell.setSnake(true);
+            snakeCell.setSnake(true);
         }
     }
 
     public Cell getCellFromPosition(Position pos) {
-        if (this.snakeCollidesWithBorder(pos)) return null; // Off the screen
-
         int posX = pos.getX();
         int posY = pos.getY();
 
