@@ -22,4 +22,8 @@ public class Position {
     public void setY(int y) {
         this.y = y;
     }
+
+    public Position copy() {
+        return new Position(this.x, this.y);
+    }
 }

@@ -1,3 +1,4 @@
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.Color;
@@ -10,32 +11,70 @@ import java.awt.event.ActionListener;
 
 
 public class GamePanel extends JPanel implements ActionListener {
-    public final Game game;
+    public Game game;
+    private final GameAI gameAI;
+    private final JButton speedButton;
+    private final Timer timer;
 
     GamePanel() {
         this.setPreferredSize(new Dimension(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT));
         this.setBackground(Color.BLACK);
+        this.setLayout(null);
 
-        this.game = new Game();
+        // Add the speed button onto the panel
+        this.speedButton = new JButton("1X");
+        this.speedButton.setBounds(500, 20, 50, 40);
+        this.speedButton.addActionListener(this);;
+        this.add(this.speedButton);
 
-        Timer timer = new Timer(Constants.FRAME_INTERVAL, this);
+        this.gameAI = new GameAI();
+        this.game = this.gameAI.getActiveGame();
+
+        this.timer = new Timer(Constants.FRAME_INTERVAL, this);
         timer.start();
     }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (this.game.isRunning) this.game.run();
+        if (actionEvent.getSource() == this.speedButton) {
+            // If the speed button is pressed
+            this.changeSpeed();
+        } else {
+            this.gameAI.run();
+            this.game = this.gameAI.getActiveGame();
 
-        this.repaint();
-        this.revalidate(); // Needed to redraw every frame
+            this.repaint();
+            this.revalidate(); // Needed to redraw every frame
+        }
+    }
+
+    private void changeSpeed() {
+        String text = this.speedButton.getText();
+
+        switch (text) {
+            case "1X":
+                this.timer.setDelay(Constants.FRAME_INTERVAL / 2);
+                this.speedButton.setText("2X");
+                break;
+            case "2X":
+                this.timer.setDelay(Constants.FRAME_INTERVAL / 4);
+                this.speedButton.setText("4X");
+                break;
+            default:
+                this.timer.setDelay(Constants.FRAME_INTERVAL);
+                this.speedButton.setText("1X");
+        }
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.drawGrid(g);
+        this.displayStats(g);
 
-        if (!this.game.isRunning) this.drawGameOverScreen(g);
+        if (!this.game.isRunning) {
+            this.drawGameOverScreen(g);
+        }
     }
 
     public void drawGrid(Graphics g) {
@@ -59,17 +98,33 @@ public class GamePanel extends JPanel implements ActionListener {
 
         // Color every cell that has the snake
         for (Position snakePos : this.game.snake.body) {
-            g.setColor(Color.GREEN);
+            if (snakePos == this.game.snake.body[0]) {
+                // Color the head a different color
+                g.setColor(new Color(5, 77, 4));
+            } else {
+                g.setColor(Color.GREEN);
+            }
             g.fillRect(snakePos.getX() * cellSize, snakePos.getY() * cellSize, cellSize, cellSize);
         }
+    }
+
+    private void displayStats(Graphics g) {
+        int score = this.game.snake.getLength() - 3;
+        String scoreMessage = "Score: " + score;
+        g.setFont(new Font("TimesRoman", Font.BOLD, 32));
+
+        // Align the score display correctly
+        FontMetrics fm = g.getFontMetrics();
+        double scoreX = ((Constants.SCREEN_WIDTH - fm.stringWidth(scoreMessage)) / 1.25);
+
+        g.drawString("Generation " + this.gameAI.generation, Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 20);
+        g.drawString(scoreMessage, (int) scoreX, Constants.SCREEN_HEIGHT / 20);
     }
 
     private void drawGameOverScreen(Graphics g) {
         this.repaint();
         this.revalidate();
-        int score = this.game.snake.getLength() - 3; // 3 is the starting length, so subtract that
         String gameOverMessage = "Game Over";
-        String scoreMessage = "Score: " + score;
 
         g.setColor(Color.BLUE);
         g.setFont(new Font("TimesRoman", Font.BOLD, 64));
@@ -77,10 +132,7 @@ public class GamePanel extends JPanel implements ActionListener {
         // Get x value to center text
         FontMetrics fm = g.getFontMetrics();
         int gameOverX = ((Constants.SCREEN_WIDTH - fm.stringWidth(gameOverMessage)) / 2);
-        int scoreMessageX = ((Constants.SCREEN_WIDTH - fm.stringWidth(scoreMessage)) / 2);
 
         g.drawString(gameOverMessage, gameOverX, Constants.SCREEN_HEIGHT / 2);
-        g.drawString(scoreMessage, scoreMessageX, Constants.SCREEN_HEIGHT / 2 + 100);
-
     }
 }

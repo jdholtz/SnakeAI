@@ -1,5 +1,7 @@
 public class Constants {
-    public static final int TOTAL_CELLS = 144;
+    public static final int STARTING_POPULATION = 500;
+
+    public static final int TOTAL_CELLS = 1296;
     public static final int SCREEN_WIDTH = 996;
     public static final int SCREEN_HEIGHT = 996;
     public static final int FRAME_INTERVAL = 200;

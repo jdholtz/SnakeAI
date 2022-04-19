@@ -1,16 +1,20 @@
 public class NeuralNetwork {
-    private final Neuron[][] neurons;
+    private final Neuron[] hiddenLayerNeurons;
+    private final Neuron[] outputLayerNeurons;
 
-    NeuralNetwork(int numLayers, int neuronsPerLayer, double[][][] weights) {
-        this.neurons = new Neuron[numLayers][neuronsPerLayer];
-        this.initializeNeurons(weights);
+    NeuralNetwork(double[][] hiddenLayerWeights, double[][] outputLayerWeights) {
+        this.hiddenLayerNeurons = new Neuron[hiddenLayerWeights.length];
+        this.outputLayerNeurons = new Neuron[outputLayerWeights.length];
+        this.initializeNeurons(hiddenLayerWeights, outputLayerWeights);
     }
 
-    private void initializeNeurons(double[][][] weights) {
-        for (int i = 0; i < this.neurons.length; i++) {
-            for (int j = 0; j < this.neurons[i].length; j++) {
-                this.neurons[i][j] = new Neuron(weights[i][j]);
-            }
+    private void initializeNeurons(double[][] hiddenLayerWeights, double[][] outputLayerWeights) {
+        for (int i = 0; i < this.hiddenLayerNeurons.length; i++) {
+            hiddenLayerNeurons[i] = new Neuron(hiddenLayerWeights[i]);
+        }
+
+        for (int i = 0; i < this.outputLayerNeurons.length; i++) {
+            outputLayerNeurons[i] = new Neuron(outputLayerWeights[i]);
         }
     }
 
@@ -19,18 +23,16 @@ public class NeuralNetwork {
      * is the largest is the network's best prediction for the next move
      */
     public double[] getAction(double[] inputs) {
-        for (Neuron[] neuronLayer : this.neurons) {
-            inputs = this.getLayerOutputs(inputs, neuronLayer);
+        // First, go through the hidden layer
+        double[] hiddenLayerOutputs = new double[this.hiddenLayerNeurons.length];
+        for (int i = 0; i < this.hiddenLayerNeurons.length; i++) {
+            hiddenLayerOutputs[i] = this.hiddenLayerNeurons[i].getOutput(inputs);
         }
 
-        return inputs;
-    }
-
-    private double[] getLayerOutputs(double[] inputs, Neuron[] neuronLayer) {
-        double[] outputs = new double[neuronLayer.length];
-
-        for (int i = 0; i < neuronLayer.length; i++) {
-            outputs[i] = neuronLayer[i].getOutput(inputs);
+        // Then, go through the output layer
+        double[] outputs = new double[this.outputLayerNeurons.length];
+        for (int i = 0; i < this.outputLayerNeurons.length; i++) {
+            outputs[i] = this.outputLayerNeurons[i].getOutput(hiddenLayerOutputs);
         }
 
         return outputs;

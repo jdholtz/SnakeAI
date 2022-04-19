@@ -49,6 +49,10 @@ public class Game extends TimerTask {
         this.checkCollisions();
     }
 
+    public void stop() {
+        this.isRunning = false;
+    }
+
     private void checkCollisions() {
         Position snakeHeadPos = this.snake.body[0];
 
@@ -58,17 +62,16 @@ public class Game extends TimerTask {
         }
 
         if (this.snakeCollidesWithBorder(snakeHeadPos) || this.snakeCollidesWithItself(snakeHeadPos)) {
-            this.isRunning = false;
-            System.out.println("Game over");
+            this.stop();
         }
     }
 
-    private boolean snakeCollidesWithApple(Position snakeHeadPos) {
+    public boolean snakeCollidesWithApple(Position snakeHeadPos) {
         return snakeHeadPos.getX() == this.applePos.getX() &&
                snakeHeadPos.getY() == this.applePos.getY();
     }
 
-    private boolean snakeCollidesWithBorder(Position snakeHeadPos) {
+    public boolean snakeCollidesWithBorder(Position snakeHeadPos) {
         int headPosX = snakeHeadPos.getX();
         int headPosY = snakeHeadPos.getY();
 
@@ -76,13 +79,13 @@ public class Game extends TimerTask {
                headPosY < 0 || headPosY > this.cells[0].length - 1;
     }
 
-    private boolean snakeCollidesWithItself(Position snakeHeadPos) {
+    public boolean snakeCollidesWithItself(Position snakeHeadPos) {
         int headPosX = snakeHeadPos.getX();
         int headPosY = snakeHeadPos.getY();
         Position[] snakeBody = this.snake.body;
 
-        // Starts at 4 because it cannot run into the 3 body parts right behind the head (and the head itself)
-        for (int i = 4; i < snakeBody.length; i++) {
+        // Starts at 1 because there is no need to check if the head collides with itself
+        for (int i = 1; i < snakeBody.length; i++) {
             if (headPosX == snakeBody[i].getX() && headPosY == snakeBody[i].getY()) {
                 return true;
             }

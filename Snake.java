@@ -20,7 +20,7 @@ public class Snake {
         for (int i = this.length - 1; i > 0; i--) {
             // A new position has to be created. Assigning directly would only make both
             // variables point to the same object, which creates problems
-            Position pos = new Position(this.body[i - 1].getX(), this.body[i - 1].getY());
+            Position pos = this.body[i - 1].copy();
             this.body[i] = pos;
         }
 
