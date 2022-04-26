@@ -22,7 +22,7 @@ public class NeuralNetwork {
      * Returns an array of values between 0 and 1. The value that
      * is the largest is the network's best prediction for the next move
      */
-    public double[] getAction(double[] inputs) {
+    public double[] getPrediction(double[] inputs) {
         // First, go through the hidden layer
         double[] hiddenLayerOutputs = new double[this.hiddenLayerNeurons.length];
         for (int i = 0; i < this.hiddenLayerNeurons.length; i++) {

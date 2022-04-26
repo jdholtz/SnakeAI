@@ -1,19 +1,107 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+
+
+/**
+ * This class is responsible for running the entire simulation. It keeps
+ * track of all the snakes and games and updates them every frame.
+ */
 public class GameAI {
+    public Generation generation;
+    public int numGeneration;
+
     private final Game[] games = new Game[Constants.STARTING_POPULATION];
     private final SnakeAI[] snakeAIs = new SnakeAI[Constants.STARTING_POPULATION];
-    public int generation;
+    private SnakeAI bestSnake;
 
     GameAI() {
-        this.generation = 0;
-        this.init();
+        this.generation = null;
+        this.numGeneration = 0;
+        this.loadBestSnake();
+        this.init(null);
     }
 
-    private void init() {
-        this.generation += 1;
+    private void init(SnakeAI[] snakeAIs) {
+        this.numGeneration += 1;
 
         for (int i = 0; i < this.games.length; i++) {
-            this.games[i] = new Game();
-            this.snakeAIs[i] = new SnakeAI(this.games[i], null, null);
+            if (snakeAIs == null) {
+                this.games[i] = new Game();
+
+                if (this.bestSnake == null) {
+                    this.snakeAIs[i] = new SnakeAI(this.games[i]);
+                } else {
+                    this.snakeAIs[i] = new SnakeAI(this.games[i], this.bestSnake.hiddenLayerWeights, this.bestSnake.outputLayerWeights);
+                }
+            } else {
+                // These snakes are the children from a previous generation
+                this.snakeAIs[i] = snakeAIs[i].copy();
+                this.games[i] = this.snakeAIs[i].getGame();
+            }
+        }
+    }
+
+    private void loadBestSnake() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("./data.csv"));
+            SnakeAI bestSnake = new SnakeAI(new Game());
+            int i = 0;
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] values = line.split(" ");
+
+                // Last line, so set the best snake's score
+                if (values.length == 1) {
+                    bestSnake.setScore(Integer.parseInt(values[0]));
+                    break;
+                }
+
+                double[] weights = Arrays.stream(values).mapToDouble(Double::parseDouble).toArray();
+
+                if (i < Constants.NUM_HIDDEN) {
+                    bestSnake.hiddenLayerWeights[i] = weights;
+                } else {
+                    // The lines are now output weights
+                    bestSnake.outputLayerWeights[i - Constants.NUM_HIDDEN] = weights;
+                }
+
+                i++;
+            }
+            this.bestSnake = bestSnake;
+        } catch (IOException e) {
+            System.out.println("File not found. Loading new snakes");
+            this.bestSnake = null;
+        }
+    }
+
+    /**
+     * Saves the weights of the best snake into a file, so it can be loaded later
+     */
+    private void saveBestSnake() {
+        try {
+            FileWriter writer = new FileWriter("./data.csv");
+            for (int i = 0; i < this.bestSnake.hiddenLayerWeights.length; i++) {
+                for (int j = 0; j < this.bestSnake.hiddenLayerWeights[i].length; j++) {
+                    writer.append(String.valueOf(this.bestSnake.hiddenLayerWeights[i][j])).append(" ");
+                }
+                writer.append("\n");
+            }
+            writer.append("\n");
+            for (int i = 0; i < this.bestSnake.outputLayerWeights.length; i++) {
+                for (int j = 0; j < this.bestSnake.outputLayerWeights[i].length; j++) {
+                    writer.append(String.valueOf(this.bestSnake.outputLayerWeights[i][j])).append(" ");
+                }
+                writer.append("\n");
+            }
+            // Write score on last line
+            writer.append((char) this.bestSnake.getScore());
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error saving best snake");
         }
     }
 
@@ -23,8 +111,6 @@ public class GameAI {
             if (game.isRunning) {
                 this.snakeAIs[i].performAction();
                 game.run();
-            } else if (this.snakeAIs[i].isAlive) {
-                this.snakeAIs[i].end();
             }
         }
     }
@@ -45,35 +131,29 @@ public class GameAI {
     }
 
     private void restart() {
+        this.endSnakes();
+        this.generation = new Generation(this.snakeAIs);
         this.end();
-        this.init();
+
+        if (this.bestSnake == null || this.generation.bestSnake.getScore() > this.bestSnake.getScore()) {
+            this.bestSnake = this.generation.bestSnake.copy();
+            this.saveBestSnake();
+        }
+
+        SnakeAI[] snakeAIs = this.generation.createNewGeneration();
+        this.init(snakeAIs);
+    }
+
+    private void endSnakes() {
+        for (SnakeAI snake : this.snakeAIs) {
+            snake.end();
+        }
     }
 
     private void end() {
-        double[] stats = this.getGenerationStats();
-        System.out.println("Best score for generation " + this.generation + ": " + stats[0]);
-        System.out.println("Average score for generation " + this.generation + ": " + stats[1]);
+        double[] stats = this.generation.getStats();
+        System.out.println("Best score for generation " + this.numGeneration + ": " + stats[0]);
+        System.out.println("Average score for generation " + this.numGeneration + ": " + stats[1]);
         System.out.println();
-    }
-
-    /**
-     * Returns the best score and the average score of the generation
-     */
-    private double[] getGenerationStats() {
-        int bestScore = 0;
-        int sumOfScores = 0;
-
-        for (SnakeAI snake : this.snakeAIs) {
-            int score = snake.getScore();
-            sumOfScores += score;
-
-            if (score > bestScore) {
-                bestScore = score;
-            }
-        }
-
-        double averageScore = sumOfScores / (double) this.snakeAIs.length;
-
-        return new double[] {bestScore, averageScore};
     }
 }

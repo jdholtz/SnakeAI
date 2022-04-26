@@ -20,6 +20,12 @@ public class Screen implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == 80) { // p
+            this.panel.pause();
+        } else if (e.getKeyCode() == 75) { // k
+            this.panel.game.stop();
+        }
+
         this.panel.game.processKeyPress(e.getKeyCode());
     }
 

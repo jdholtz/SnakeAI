@@ -12,9 +12,11 @@ import java.awt.event.ActionListener;
 
 public class GamePanel extends JPanel implements ActionListener {
     public Game game;
+
     private final GameAI gameAI;
     private final JButton speedButton;
     private final Timer timer;
+    private boolean isPaused = false;
 
     GamePanel() {
         this.setPreferredSize(new Dimension(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT));
@@ -26,6 +28,7 @@ public class GamePanel extends JPanel implements ActionListener {
         this.speedButton.setBounds(500, 20, 50, 40);
         this.speedButton.addActionListener(this);;
         this.add(this.speedButton);
+        this.speedButton.setFocusable(false); // So focus is still on the JFrame instead of the JButton
 
         this.gameAI = new GameAI();
         this.game = this.gameAI.getActiveGame();
@@ -34,8 +37,16 @@ public class GamePanel extends JPanel implements ActionListener {
         timer.start();
     }
 
+    public void pause() {
+        this.isPaused = !this.isPaused;
+    }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
+        if (this.isPaused) {
+            return;
+        }
+
         if (actionEvent.getSource() == this.speedButton) {
             // If the speed button is pressed
             this.changeSpeed();
@@ -117,7 +128,7 @@ public class GamePanel extends JPanel implements ActionListener {
         FontMetrics fm = g.getFontMetrics();
         double scoreX = ((Constants.SCREEN_WIDTH - fm.stringWidth(scoreMessage)) / 1.25);
 
-        g.drawString("Generation " + this.gameAI.generation, Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 20);
+        g.drawString("Generation " + this.gameAI.numGeneration, Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 20);
         g.drawString(scoreMessage, (int) scoreX, Constants.SCREEN_HEIGHT / 20);
     }
 
