@@ -23,6 +23,7 @@ public class Game extends TimerTask {
         }
 
         this.snake = new Snake(numCellsOnSide);
+        this.updateCells();
         this.generateApple();
         this.isRunning = true;
     }
