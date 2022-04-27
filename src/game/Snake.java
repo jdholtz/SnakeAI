@@ -1,3 +1,5 @@
+package src.game;
+
 public class Snake {
     public Position[] body;
     public int direction = Constants.DIRECTION_UP;

@@ -1,3 +1,5 @@
+package src.game;
+
 public class Cell {
     private final Position position;
     private boolean isSnake = false;

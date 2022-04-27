@@ -1,4 +1,10 @@
+package src.genetic_algorithm;
+
+import src.ai.SnakeAI;
+import src.game.Game;
+
 import java.util.Random;
+
 
 /**
  * This class is responsible for most of the genetic algorithm of the program.
@@ -11,7 +17,7 @@ public class Generation {
     private double bestScore;
     private double averageScore;
 
-    Generation(SnakeAI[] snakes) {
+    public Generation(SnakeAI[] snakes) {
         this.snakes = snakes;
         this.calculateStats();
         this.setBestSnake();

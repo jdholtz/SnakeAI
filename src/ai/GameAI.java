@@ -1,4 +1,11 @@
+package src.ai;
+
+import src.game.Constants;
+import src.game.Game;
+import src.genetic_algorithm.Generation;
+
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,7 +24,7 @@ public class GameAI {
     private final SnakeAI[] snakeAIs = new SnakeAI[Constants.STARTING_POPULATION];
     private SnakeAI bestSnake;
 
-    GameAI() {
+    public GameAI() {
         this.generation = null;
         this.numGeneration = 0;
         this.loadBestSnake();
@@ -25,7 +32,7 @@ public class GameAI {
     }
 
     private void init(SnakeAI[] snakeAIs) {
-        this.numGeneration += 1;
+        this.numGeneration++;
 
         for (int i = 0; i < this.games.length; i++) {
             if (snakeAIs == null) {
@@ -46,7 +53,7 @@ public class GameAI {
 
     private void loadBestSnake() {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("./data.csv"));
+            BufferedReader reader = new BufferedReader(new FileReader("snakeData/snakeData.csv"));
             SnakeAI bestSnake = new SnakeAI(new Game());
             int i = 0;
             String line;
@@ -73,7 +80,7 @@ public class GameAI {
             }
             this.bestSnake = bestSnake;
         } catch (IOException e) {
-            System.out.println("File not found. Loading new snakes");
+            System.out.println("Snake Data file not found. Loading new snakes");
             this.bestSnake = null;
         }
     }
@@ -83,7 +90,13 @@ public class GameAI {
      */
     private void saveBestSnake() {
         try {
-            FileWriter writer = new FileWriter("./data.csv");
+            // First make the directory if it doesn't exist
+            if (!this.makeDirectory()) {
+                throw new IOException("Error making Snake Data directory");
+            }
+
+            // Write the snake's weights to a file
+            FileWriter writer = new FileWriter("snakeData/snakeData.csv");
             for (int i = 0; i < this.bestSnake.hiddenLayerWeights.length; i++) {
                 for (int j = 0; j < this.bestSnake.hiddenLayerWeights[i].length; j++) {
                     writer.append(String.valueOf(this.bestSnake.hiddenLayerWeights[i][j])).append(" ");
@@ -102,7 +115,17 @@ public class GameAI {
             writer.close();
         } catch (IOException e) {
             System.out.println("Error saving best snake");
+            e.printStackTrace();
         }
+    }
+
+    private boolean makeDirectory() {
+        File directory = new File("snakeData");
+        if (!directory.exists()) {
+            return directory.mkdir();
+        }
+
+        return true;
     }
 
     public void run() {

@@ -1,3 +1,10 @@
+package src.screen;
+
+import src.ai.GameAI;
+import src.game.Constants;
+import src.game.Game;
+import src.game.Position;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -26,7 +33,7 @@ public class GamePanel extends JPanel implements ActionListener {
         // Add the speed button onto the panel
         this.speedButton = new JButton("1X");
         this.speedButton.setBounds(500, 20, 50, 40);
-        this.speedButton.addActionListener(this);;
+        this.speedButton.addActionListener(this);
         this.add(this.speedButton);
         this.speedButton.setFocusable(false); // So focus is still on the JFrame instead of the JButton
 

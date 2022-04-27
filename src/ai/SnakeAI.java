@@ -1,3 +1,10 @@
+package src.ai;
+
+import src.game.Constants;
+import src.game.Game;
+import src.game.Position;
+import src.neural_network.NeuralNetwork;
+
 import java.util.Random;
 
 
@@ -22,7 +29,7 @@ public class SnakeAI {
         this.network = new NeuralNetwork(this.hiddenLayerWeights, this.outputLayerWeights);
     }
 
-    SnakeAI(Game game, double[][] hiddenLayerWeights, double[][] outputLayerWeights) {
+    public SnakeAI(Game game, double[][] hiddenLayerWeights, double[][] outputLayerWeights) {
         // Copy the matrices so each snake doesn't point to the same weights
         double[][][] weightsCopy = this.copyWeights(hiddenLayerWeights, outputLayerWeights);
         this.hiddenLayerWeights = weightsCopy[0];
@@ -235,9 +242,6 @@ public class SnakeAI {
      * This function prioritizes apples over staying alive longer. At first,
      * it encourages staying alive, but as the game goes on, there is a bigger
      * penalty for taking many moves, which prevents every snake from looping.
-     * As snakes evolve, they will actually adjust to take a longer route to an
-     * apple to avoid their body. This is because the amount of apples they eat
-     * is prioritized the most in this function.
      */
     private int calculateFitness() {
         return (int) (this.moves + 1000 * Math.pow(this.score, 2) - 0.25 * Math.pow(this.moves, 1.4));

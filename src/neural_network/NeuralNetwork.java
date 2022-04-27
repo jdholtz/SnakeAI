@@ -1,8 +1,10 @@
+package src.neural_network;
+
 public class NeuralNetwork {
     private final Neuron[] hiddenLayerNeurons;
     private final Neuron[] outputLayerNeurons;
 
-    NeuralNetwork(double[][] hiddenLayerWeights, double[][] outputLayerWeights) {
+    public NeuralNetwork(double[][] hiddenLayerWeights, double[][] outputLayerWeights) {
         this.hiddenLayerNeurons = new Neuron[hiddenLayerWeights.length];
         this.outputLayerNeurons = new Neuron[outputLayerWeights.length];
         this.initializeNeurons(hiddenLayerWeights, outputLayerWeights);
@@ -20,7 +22,7 @@ public class NeuralNetwork {
 
     /**
      * Returns an array of values between 0 and 1. The value that
-     * is the largest is the network's best prediction for the next move
+     * is the largest is the network's best prediction for the next move.
      */
     public double[] getPrediction(double[] inputs) {
         // First, go through the hidden layer

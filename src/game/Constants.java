@@ -1,3 +1,5 @@
+package src.game;
+
 public class Constants {
     public static final int STARTING_POPULATION = 500;
     public static final double MUTATION_RATE = 0.05;

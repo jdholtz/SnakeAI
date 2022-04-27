@@ -1,5 +1,6 @@
 *.class
 *.csv
+snakeData/
 
 # IntelliJ stuff
 .idea/

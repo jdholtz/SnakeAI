@@ -1,6 +1,9 @@
+package src.screen;
+
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 
 public class Screen implements KeyListener {
     private final GamePanel panel;

@@ -1,3 +1,5 @@
+package src.neural_network;
+
 public class Neuron {
     private final double[] weights;
 

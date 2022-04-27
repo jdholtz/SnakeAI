@@ -1,7 +1,9 @@
-import java.util.Random;
-import java.util.TimerTask;
+package src.game;
 
-public class Game extends TimerTask {
+import java.util.Random;
+
+
+public class Game {
     public final Cell[][] cells;
     public final int cellSize;
     public final Snake snake;
@@ -9,7 +11,7 @@ public class Game extends TimerTask {
     public boolean isRunning;
     private boolean keyPressedInFrame = false;
 
-    Game() {
+    public Game() {
         // Number of cells should be a perfect square so a square grid can be made
         int numCellsOnSide = (int) Math.sqrt(Constants.TOTAL_CELLS);
         this.cellSize = Constants.SCREEN_WIDTH / numCellsOnSide;
@@ -96,8 +98,9 @@ public class Game extends TimerTask {
     }
 
     public void updateCells() {
-        // First, reset all cells. Then, set all cells that are part of the snake to true.
-        // Separating these functions into two loops increases efficiency because less iterating is done.
+        // First, reset all cells. Then, set all cells that are
+        // part of the snake to true. Separating these functions
+        // into two loops increases efficiency because less iterating is done.
         for (Cell[] cellRow : this.cells) {
             for (Cell cell : cellRow) {
                 cell.setSnake(false);
