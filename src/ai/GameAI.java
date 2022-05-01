@@ -103,7 +103,6 @@ public class GameAI {
                 }
                 writer.append("\n");
             }
-            writer.append("\n");
             for (int i = 0; i < this.bestSnake.outputLayerWeights.length; i++) {
                 for (int j = 0; j < this.bestSnake.outputLayerWeights[i].length; j++) {
                     writer.append(String.valueOf(this.bestSnake.outputLayerWeights[i][j])).append(" ");
@@ -111,7 +110,7 @@ public class GameAI {
                 writer.append("\n");
             }
             // Write score on last line
-            writer.append((char) this.bestSnake.getScore());
+            writer.append(String.valueOf(this.bestSnake.getScore()));
             writer.close();
         } catch (IOException e) {
             System.out.println("Error saving best snake");

@@ -256,6 +256,8 @@ public class SnakeAI {
     }
 
     public SnakeAI copy() {
-        return new SnakeAI(new Game(), this.hiddenLayerWeights, this.outputLayerWeights);
+        SnakeAI newSnake = new SnakeAI(new Game(), this.hiddenLayerWeights, this.outputLayerWeights);
+        newSnake.setScore(this.score);
+        return newSnake;
     }
 }
