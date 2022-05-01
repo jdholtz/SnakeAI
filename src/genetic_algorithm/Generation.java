@@ -124,6 +124,6 @@ public class Generation {
             }
         }
 
-        return new SnakeAI(new Game(), newHiddenWeights, newOutputWeights);
+        return new SnakeAI(newHiddenWeights, newOutputWeights);
     }
 }

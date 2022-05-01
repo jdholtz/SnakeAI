@@ -23,20 +23,20 @@ public class SnakeAI {
     private int fitness = 0;
     private int score = 0;
 
-    SnakeAI(Game game) {
+    SnakeAI() {
         this.intializeWeights();
-        this.game = game;
+        this.game = new Game();
         this.network = new NeuralNetwork(this.hiddenLayerWeights, this.outputLayerWeights);
     }
 
-    public SnakeAI(Game game, double[][] hiddenLayerWeights, double[][] outputLayerWeights) {
+    public SnakeAI(double[][] hiddenLayerWeights, double[][] outputLayerWeights) {
         // Copy the matrices so each snake doesn't point to the same weights
         double[][][] weightsCopy = this.copyWeights(hiddenLayerWeights, outputLayerWeights);
         this.hiddenLayerWeights = weightsCopy[0];
         this.outputLayerWeights = weightsCopy[1];
         this.mutate();
 
-        this.game = game;
+        this.game = new Game();
         this.network = new NeuralNetwork(this.hiddenLayerWeights, this.outputLayerWeights);
     }
 
@@ -256,7 +256,7 @@ public class SnakeAI {
     }
 
     public SnakeAI copy() {
-        SnakeAI newSnake = new SnakeAI(new Game(), this.hiddenLayerWeights, this.outputLayerWeights);
+        SnakeAI newSnake = new SnakeAI(this.hiddenLayerWeights, this.outputLayerWeights);
         newSnake.setScore(this.score);
         return newSnake;
     }

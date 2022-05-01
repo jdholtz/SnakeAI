@@ -36,13 +36,12 @@ public class GameAI {
 
         for (int i = 0; i < this.games.length; i++) {
             if (snakeAIs == null) {
-                this.games[i] = new Game();
-
                 if (this.bestSnake == null) {
-                    this.snakeAIs[i] = new SnakeAI(this.games[i]);
+                    this.snakeAIs[i] = new SnakeAI();
                 } else {
-                    this.snakeAIs[i] = new SnakeAI(this.games[i], this.bestSnake.hiddenLayerWeights, this.bestSnake.outputLayerWeights);
+                    this.snakeAIs[i] = new SnakeAI(this.bestSnake.hiddenLayerWeights, this.bestSnake.outputLayerWeights);
                 }
+                this.games[i] = this.snakeAIs[i].getGame();
             } else {
                 // These snakes are the children from a previous generation
                 this.snakeAIs[i] = snakeAIs[i].copy();
@@ -54,7 +53,7 @@ public class GameAI {
     private void loadBestSnake() {
         try {
             BufferedReader reader = new BufferedReader(new FileReader("snakeData/snakeData.csv"));
-            SnakeAI bestSnake = new SnakeAI(new Game());
+            SnakeAI bestSnake = new SnakeAI();
             int i = 0;
             String line;
 
