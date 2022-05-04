@@ -45,6 +45,10 @@ public class Game {
     }
 
     public void run() {
+        if (!this.isRunning) {
+            return;
+        }
+
         this.keyPressedInFrame = false;
 
         this.snake.move();

@@ -6,30 +6,31 @@ import java.awt.event.KeyListener;
 
 
 public class Screen implements KeyListener {
-    private final GamePanel panel;
+    private final JFrame mainScreen;
+    private Panel panel;
 
     public Screen () {
-        JFrame mainScreen = new JFrame("Snake");
-        this.panel = new GamePanel();
-        mainScreen.add(this.panel);
-        mainScreen.addKeyListener(this);
+        this.mainScreen = new JFrame("Snake");
+        this.mainScreen.addKeyListener(this);
+        this.mainScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.mainScreen.setResizable(false);
 
-        mainScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainScreen.pack();
-        mainScreen.setResizable(false);
-        mainScreen.setLocationRelativeTo(null);
-        mainScreen.setVisible(true);
+        this.panel = new StartPanel(this);
+        this.mainScreen.add(this.panel);
+        this.mainScreen.pack();
+        this.mainScreen.setLocationRelativeTo(null);
+        this.mainScreen.setVisible(true);
+    }
+
+    public void setPanel(Panel panel) {
+        this.mainScreen.remove(this.panel);
+        this.panel = panel;
+        this.mainScreen.add(panel);
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == 80) { // p
-            this.panel.pause();
-        } else if (e.getKeyCode() == 75) { // k
-            this.panel.game.stop();
-        }
-
-        this.panel.game.processKeyPress(e.getKeyCode());
+        this.panel.processKeyPress(e.getKeyCode());
     }
 
     // These functions are here to satisfy the KeyListener interface

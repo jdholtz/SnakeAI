@@ -1,68 +1,50 @@
 package src.screen;
 
-import src.ai.GameAI;
 import src.game.Constants;
 import src.game.Game;
 import src.game.Position;
 
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
-public class GamePanel extends JPanel implements ActionListener {
+public class GamePanel extends Panel {
     public Game game;
 
-    private final GameAI gameAI;
+    protected final Timer timer;
+
     private final JButton speedButton;
-    private final Timer timer;
-    private boolean isPaused = false;
 
     GamePanel() {
-        this.setPreferredSize(new Dimension(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT));
-        this.setBackground(Color.BLACK);
-        this.setLayout(null);
-
-        // Add the speed button onto the panel
-        this.speedButton = new JButton("1X");
-        this.speedButton.setBounds(500, 20, 50, 40);
+        this.speedButton = new Button("1X", Constants.SCREEN_WIDTH / 2, 20, 50, 40);
         this.speedButton.addActionListener(this);
         this.add(this.speedButton);
-        this.speedButton.setFocusable(false); // So focus is still on the JFrame instead of the JButton
-
-        this.gameAI = new GameAI();
-        this.game = this.gameAI.getActiveGame();
 
         this.timer = new Timer(Constants.FRAME_INTERVAL, this);
-        timer.start();
-    }
-
-    public void pause() {
-        this.isPaused = !this.isPaused;
+        this.timer.start();
     }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (this.isPaused) {
-            return;
-        }
-
         if (actionEvent.getSource() == this.speedButton) {
             // If the speed button is pressed
             this.changeSpeed();
         } else {
-            this.gameAI.run();
-            this.game = this.gameAI.getActiveGame();
-
             this.repaint();
             this.revalidate(); // Needed to redraw every frame
+        }
+    }
+
+    @Override
+    public void processKeyPress(int keyCode) {
+        if (keyCode == 80) { // p
+            this.pause();
+        } else if (keyCode == 75) { // k
+            this.game.stop();
         }
     }
 
@@ -88,11 +70,7 @@ public class GamePanel extends JPanel implements ActionListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.drawGrid(g);
-        this.displayStats(g);
-
-        if (!this.game.isRunning) {
-            this.drawGameOverScreen(g);
-        }
+        this.drawScore(g);
     }
 
     public void drawGrid(Graphics g) {
@@ -126,31 +104,12 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
-    private void displayStats(Graphics g) {
-        int score = this.game.snake.getLength() - 3;
-        String scoreMessage = "Score: " + score;
+    private void drawScore(Graphics g) {
         g.setFont(new Font("TimesRoman", Font.BOLD, 32));
 
-        // Align the score display correctly
-        FontMetrics fm = g.getFontMetrics();
-        double scoreX = ((Constants.SCREEN_WIDTH - fm.stringWidth(scoreMessage)) / 1.25);
-
-        g.drawString("Generation " + this.gameAI.numGeneration, Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 20);
-        g.drawString(scoreMessage, (int) scoreX, Constants.SCREEN_HEIGHT / 20);
-    }
-
-    private void drawGameOverScreen(Graphics g) {
-        this.repaint();
-        this.revalidate();
-        String gameOverMessage = "Game Over";
-
-        g.setColor(Color.BLUE);
-        g.setFont(new Font("TimesRoman", Font.BOLD, 64));
-
-        // Get x value to center text
-        FontMetrics fm = g.getFontMetrics();
-        int gameOverX = ((Constants.SCREEN_WIDTH - fm.stringWidth(gameOverMessage)) / 2);
-
-        g.drawString(gameOverMessage, gameOverX, Constants.SCREEN_HEIGHT / 2);
+        int score = this.game.snake.getLength() - 3; // Starting length is 3
+        int x = (int) (Constants.SCREEN_WIDTH / 1.3);
+        int y = Constants.SCREEN_HEIGHT / 16;
+        super.drawString("Score: " + score, g, x, y);
     }
 }
