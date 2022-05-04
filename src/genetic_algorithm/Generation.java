@@ -1,7 +1,6 @@
 package src.genetic_algorithm;
 
 import src.ai.SnakeAI;
-import src.game.Game;
 
 import java.util.Random;
 

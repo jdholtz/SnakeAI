@@ -54,7 +54,7 @@ public class Snake {
         Position[] newBody = new Position[this.length + 1];
 
         for (int i = 0; i < this.length; i++) {
-            newBody[i] = this.body[i];
+            newBody[i] = this.body[i].copy();
         }
 
         newBody[newBody.length - 1] = tailPos;

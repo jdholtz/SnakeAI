@@ -24,7 +24,7 @@ public class SnakeAI {
     private int score = 0;
 
     SnakeAI() {
-        this.intializeWeights();
+        this.initializeWeights();
         this.game = new Game();
         this.network = new NeuralNetwork(this.hiddenLayerWeights, this.outputLayerWeights);
     }
@@ -40,7 +40,7 @@ public class SnakeAI {
         this.network = new NeuralNetwork(this.hiddenLayerWeights, this.outputLayerWeights);
     }
 
-    private void intializeWeights() {
+    private void initializeWeights() {
         // All values of the weights are between -1 and 1
         this.hiddenLayerWeights = new double[Constants.NUM_HIDDEN][Constants.NUM_INPUTS];
         this.outputLayerWeights = new double[4][Constants.NUM_HIDDEN];

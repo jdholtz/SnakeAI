@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 
 public class PlayerPanel extends GamePanel {
     PlayerPanel() {
-        super();
         super.game = new Game();
     }
 

@@ -20,7 +20,7 @@ public class Game {
         this.cells = new Cell[numCellsOnSide][numCellsOnSide];
         for (int i = 0; i < numCellsOnSide; i++) {
             for (int j = 0; j < numCellsOnSide; j++) {
-                this.cells[i][j] = new Cell(i * this.cellSize, j * this.cellSize);
+                this.cells[i][j] = new Cell();
             }
         }
 
