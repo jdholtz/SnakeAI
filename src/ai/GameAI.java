@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 
 
@@ -24,10 +25,13 @@ public class GameAI {
     private final SnakeAI[] snakeAIs = new SnakeAI[Constants.STARTING_POPULATION];
     private SnakeAI bestSnake;
 
-    public GameAI() {
-        this.generation = null;
+    public GameAI(boolean loadFile) {
         this.numGeneration = 0;
-        this.loadBestSnake();
+        if (loadFile) {
+            this.loadBestSnake();
+        } else {
+            this.deleteSnakeData();
+        }
         this.init(null);
     }
 
@@ -41,12 +45,11 @@ public class GameAI {
                 } else {
                     this.snakeAIs[i] = new SnakeAI(this.bestSnake.hiddenLayerWeights, this.bestSnake.outputLayerWeights);
                 }
-                this.games[i] = this.snakeAIs[i].getGame();
             } else {
                 // These snakes are the children from a previous generation
                 this.snakeAIs[i] = snakeAIs[i].copy();
-                this.games[i] = this.snakeAIs[i].getGame();
             }
+            this.games[i] = this.snakeAIs[i].getGame();
         }
     }
 
@@ -124,6 +127,16 @@ public class GameAI {
         }
 
         return true;
+    }
+
+    private void deleteSnakeData() {
+        try {
+            File file = new File("snakeData/snakeData.csv");
+            Files.deleteIfExists(file.toPath());
+        } catch (IOException e) {
+            System.out.println("Error deleting Snake Data file");
+            e.printStackTrace();
+        }
     }
 
     public void run() {

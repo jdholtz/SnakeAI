@@ -9,9 +9,8 @@ import java.awt.event.ActionEvent;
 public class EvolutionPanel extends GamePanel {
     private final GameAI gameAI;
 
-    EvolutionPanel() {
-        super();
-        this.gameAI = new GameAI();
+    EvolutionPanel(boolean loadFile) {
+        this.gameAI = new GameAI(loadFile);
         this.game = this.gameAI.getActiveGame();
     }
 

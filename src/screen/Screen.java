@@ -26,6 +26,7 @@ public class Screen implements KeyListener {
         this.mainScreen.remove(this.panel);
         this.panel = panel;
         this.mainScreen.add(panel);
+        this.panel.revalidate();
     }
 
     @Override
