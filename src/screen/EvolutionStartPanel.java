@@ -26,9 +26,9 @@ public class EvolutionStartPanel extends Panel {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == this.loadFileButton) {
-            this.screen.setPanel(new EvolutionPanel(true));
+            this.screen.setPanel(new EvolutionSelectionPanel(this.screen, true));
         } else if (actionEvent.getSource() == this.startNewButton) {
-            this.screen.setPanel(new EvolutionPanel(false));
+            this.screen.setPanel(new EvolutionSelectionPanel(this.screen, false));
         } else {
             System.out.println("Unknown actionEvent. Skipping...");
         }
