@@ -14,6 +14,7 @@ public class Screen implements KeyListener {
         this.mainScreen.addKeyListener(this);
         this.mainScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.mainScreen.setResizable(false);
+        this.mainScreen.setFocusable(true);
 
         this.panel = new StartPanel(this);
         this.mainScreen.add(this.panel);

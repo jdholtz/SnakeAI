@@ -30,12 +30,25 @@ public class EvolutionPanel extends GamePanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        this.drawGeneration(g);
+        this.drawStats(g);
     }
 
-    private void drawGeneration(Graphics g) {
+    private void drawStats(Graphics g) {
         int x = (int) (Constants.SCREEN_WIDTH / 4.2);
         int y = Constants.SCREEN_HEIGHT / 16;
         super.drawString("Generation " + this.gameAI.numGeneration, g, x, y);
+
+        if (this.gameAI.numGeneration < 2) {
+            return;
+        }
+
+        double[] stats = this.gameAI.generation.getStats();
+
+        x = Constants.SCREEN_WIDTH / 10;
+        y = (int) (Constants.SCREEN_HEIGHT / 1.05);
+        super.drawString("Best score for generation " + this.gameAI.numGeneration + ": " + stats[0], g, x, y, false);
+
+        y += 30;
+        super.drawString("Average score for generation " + this.gameAI.numGeneration + ": " + stats[1], g, x, y, false);
     }
 }

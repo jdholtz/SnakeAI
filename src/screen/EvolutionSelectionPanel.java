@@ -180,6 +180,5 @@ public class EvolutionSelectionPanel extends Panel implements FocusListener {
         Constants.MOVES_PER_APPLE = Integer.parseInt(String.valueOf(this.maxMovesField.getValue()));
         Constants.TOTAL_CELLS = Integer.parseInt(this.totalCellsField.getText()) * Integer.parseInt(this.totalCellsField.getText());
         Constants.FRAME_INTERVAL = 1000 / Integer.parseInt(this.FPSField.getText());
-        System.out.println(Constants.FRAME_INTERVAL);
     }
 }

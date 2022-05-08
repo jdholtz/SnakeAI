@@ -167,7 +167,6 @@ public class GameAI {
     private void restart() {
         this.endSnakes();
         this.generation = new Generation(this.snakeAIs);
-        this.end();
 
         if (this.bestSnake == null || this.generation.bestSnake.getScore() > this.bestSnake.getScore()) {
             this.bestSnake = this.generation.bestSnake.copy();
@@ -182,12 +181,5 @@ public class GameAI {
         for (SnakeAI snake : this.snakeAIs) {
             snake.end();
         }
-    }
-
-    private void end() {
-        double[] stats = this.generation.getStats();
-        System.out.println("Best score for generation " + this.numGeneration + ": " + stats[0]);
-        System.out.println("Average score for generation " + this.numGeneration + ": " + stats[1]);
-        System.out.println();
     }
 }
