@@ -72,14 +72,13 @@ public class EvolutionSelectionPanel extends SelectionPanel {
         // Remove all non-numbers (excluding decimal and negative sign) from text
         text = text.replaceAll("[^0-9.-]", "");
 
+        // If the text box is empty
+        if (text.equals("")) {
+            text = "0";
+        }
+
         if (textField == this.mutationField) {
-            double input;
-            // If the text box is empty
-            if (text.equals("")) {
-                input = 0;
-            } else {
-                input = Double.parseDouble(text);
-            }
+            double input = Double.parseDouble(text);
 
             if (input > 1) {
                 this.mutationField.setValue(1.0);
@@ -91,13 +90,7 @@ public class EvolutionSelectionPanel extends SelectionPanel {
         // Get rid of everything after the decimal if there is one
         text = text.split("\\.")[0];
 
-        int input;
-        // If text box is empty
-        if (text.equals("")) {
-            input = 0;
-        } else {
-            input = Integer.parseInt(text);
-        }
+        int input = Integer.parseInt(text);
 
         if (textField == this.populationField) {
             if (input > Constants.STARTING_POPULATION_LIMIT) {
