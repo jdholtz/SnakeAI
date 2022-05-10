@@ -25,7 +25,7 @@ public class StartPanel extends Panel {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == this.playerButton) {
-            this.screen.setPanel(new PlayerPanel());
+            this.screen.setPanel(new PlayerSelectionPanel(this.screen));
         } else if (actionEvent.getSource() == this.evolutionButton) {
             this.screen.setPanel(new EvolutionStartPanel(this.screen));
         } else {

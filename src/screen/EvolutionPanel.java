@@ -20,7 +20,7 @@ public class EvolutionPanel extends GamePanel {
             return;
         }
 
-        if (actionEvent.getSource() == super.timer) {
+        if (actionEvent.getSource() == this.timer) {
             this.gameAI.run();
             this.game = this.gameAI.getActiveGame();
         }
