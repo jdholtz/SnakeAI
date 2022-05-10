@@ -6,6 +6,7 @@ import src.game.Position;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -50,5 +51,14 @@ public class Panel extends JPanel implements ActionListener {
         int newX = x - (fontMetrics.stringWidth(string) / 2);
         int newY = ((y - fontMetrics.getHeight())) + fontMetrics.getAscent();
         return new Position(newX, newY);
+    }
+
+    protected void drawTitle(Graphics g) {
+        g.setFont(new Font("TimesRoman", Font.BOLD, 96));
+        g.setColor(Color.GREEN);
+
+        int x = Constants.SCREEN_WIDTH / 2;
+        int y = Constants.SCREEN_HEIGHT / 5;
+        this.drawString("Snake AI", g, x, y);
     }
 }

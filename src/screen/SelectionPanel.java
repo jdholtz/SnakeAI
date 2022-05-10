@@ -3,6 +3,7 @@ package src.screen;
 import src.game.Constants;
 
 import javax.swing.SwingUtilities;
+import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.NumberFormat;
@@ -36,6 +37,12 @@ public class SelectionPanel extends Panel implements FocusListener {
 
         this.startButton.addActionListener(this);
         this.add(startButton);
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        super.drawTitle(g);
     }
 
     @Override

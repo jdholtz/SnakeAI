@@ -3,6 +3,7 @@ package src.screen;
 import src.game.Constants;
 
 import javax.swing.JButton;
+import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 
 
@@ -18,9 +19,15 @@ public class EvolutionStartPanel extends Panel {
         this.loadFileButton.addActionListener(this);
         this.add(this.loadFileButton);
 
-        this.startNewButton = new Button("Start New Evolution", (int) (Constants.SCREEN_WIDTH / 1.7), Constants.SCREEN_HEIGHT / 2, 200, 40);
+        this.startNewButton = new Button("Start New Evolution", (int) (Constants.SCREEN_WIDTH / 1.6), Constants.SCREEN_HEIGHT / 2, 200, 40);
         this.startNewButton.addActionListener(this);
         this.add(this.startNewButton);
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        super.drawTitle(g);
     }
 
     @Override
