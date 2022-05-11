@@ -1,12 +1,14 @@
-package src.screen;
+package src.screen.panels;
 
 import src.game.Constants;
 import src.game.Game;
+import src.screen.panels.GamePanel;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+
 
 public class PlayerPanel extends GamePanel {
     PlayerPanel() {

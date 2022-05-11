@@ -1,4 +1,4 @@
-package src.screen;
+package src.screen.panels;
 
 import src.game.Constants;
 import src.game.Position;

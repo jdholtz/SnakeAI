@@ -1,12 +1,17 @@
-package src.screen;
+package src.screen.panels;
 
 import src.game.Constants;
+import src.screen.Screen;
+import src.screen.components.Button;
+import src.screen.components.TextField;
+import src.screen.panels.Panel;
 
 import javax.swing.SwingUtilities;
 import java.awt.Graphics;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.text.NumberFormat;
+
 
 public class SelectionPanel extends Panel implements FocusListener {
     protected Screen screen;

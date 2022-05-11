@@ -1,17 +1,23 @@
-package src.screen;
+package src.screen.panels;
 
 import src.game.Constants;
+import src.screen.Screen;
+import src.screen.components.Button;
+import src.screen.panels.EvolutionStartPanel;
+import src.screen.panels.Panel;
+import src.screen.panels.PlayerSelectionPanel;
 
 import javax.swing.JButton;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+
 
 public class StartPanel extends Panel {
     private final Screen screen;
     private final JButton playerButton;
     private final JButton evolutionButton;
 
-    StartPanel(Screen screen) {
+    public StartPanel(Screen screen) {
         this.screen = screen;
 
         this.playerButton = new Button("Start Player Game", Constants.SCREEN_WIDTH / 5, Constants.SCREEN_HEIGHT / 2, 200, 40);

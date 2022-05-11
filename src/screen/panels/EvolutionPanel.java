@@ -1,10 +1,11 @@
-package src.screen;
+package src.screen.panels;
 
 import src.ai.GameAI;
 import src.game.Constants;
 
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
+
 
 public class EvolutionPanel extends GamePanel {
     private final GameAI gameAI;

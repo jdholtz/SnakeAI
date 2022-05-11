@@ -1,6 +1,8 @@
-package src.screen;
+package src.screen.panels;
 
 import src.game.Constants;
+import src.screen.Screen;
+import src.screen.components.Button;
 
 import javax.swing.JButton;
 import java.awt.Graphics;

@@ -1,8 +1,13 @@
-package src.screen;
+package src.screen.panels;
 
 import src.game.Constants;
+import src.screen.Screen;
+import src.screen.components.Button;
+import src.screen.components.Label;
+import src.screen.components.TextField;
 
 import java.awt.event.ActionEvent;
+
 
 public class PlayerSelectionPanel  extends SelectionPanel {
 

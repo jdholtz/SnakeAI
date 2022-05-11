@@ -1,8 +1,9 @@
-package src.screen;
+package src.screen.panels;
 
 import src.game.Constants;
 import src.game.Game;
 import src.game.Position;
+import src.screen.components.Button;
 
 import javax.swing.JButton;
 import javax.swing.Timer;

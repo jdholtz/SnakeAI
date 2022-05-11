@@ -1,5 +1,8 @@
 package src.screen;
 
+import src.screen.panels.Panel;
+import src.screen.panels.StartPanel;
+
 import javax.swing.JFrame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
