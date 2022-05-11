@@ -74,16 +74,15 @@ public class SelectionPanel extends Panel implements FocusListener {
         // Remove all non-numbers (excluding decimal and negative sign) from text
         text = text.replaceAll("[^0-9.-]", "");
 
+        // If the text field is empty
+        if (text.equals("")) {
+            text = "0";
+        }
+
         // Get rid of everything after the decimal if there is one
         text = text.split("\\.")[0];
 
-        // If the text field is empty
-        int input;
-        if (text.equals("")) {
-            input = 0;
-        } else {
-            input = Integer.parseInt(text);
-        }
+        int input = Integer.parseInt(text);
 
         if (textField == this.totalCellsField) {
             if (input > Math.sqrt(Constants.TOTAL_CELLS_LIMIT)) {

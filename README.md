@@ -7,7 +7,7 @@ Head over to the [wiki][0] for information on how it works.
 - [Java 8+][1]
 
 # Installation
-First, clone the repositiory
+First, clone the repository
 ```bash
 $ git clone https://github.com/jdholtz/SnakeAI.git
 $ cd SnakeAI
