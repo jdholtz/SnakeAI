@@ -47,9 +47,9 @@ public class EvolutionPanel extends GamePanel {
 
         x = Constants.SCREEN_WIDTH / 10;
         y = (int) (Constants.SCREEN_HEIGHT / 1.05);
-        super.drawString("Best score for generation " + this.gameAI.numGeneration + ": " + stats[0], g, x, y, false);
+        super.drawString("Best score for generation " + (this.gameAI.numGeneration - 1) + ": " + stats[0], g, x, y, false);
 
         y += 30;
-        super.drawString("Average score for generation " + this.gameAI.numGeneration + ": " + stats[1], g, x, y, false);
+        super.drawString("Average score for generation " + (this.gameAI.numGeneration - 1) + ": " + stats[1], g, x, y, false);
     }
 }
